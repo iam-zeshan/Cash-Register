@@ -9,9 +9,9 @@ const process = (i, remainingChange, cid, currencies) => {
         } while (currentCurrency <= remainingChange && currentCurrency <= cid[i][1])
         currentCurrency -= currencies[i];
         remainingChange -= currentCurrency;
-        // if (i === 0 && remainingChange > 0) {
-        //     return [];
-        // }
+        if (i === 0 && remainingChange > 0) {
+            return [];
+        }
         return [cid[i][0], currentCurrency, remainingChange];
     }
 }
