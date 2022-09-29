@@ -1,2 +1,2 @@
 # Cash Register
-This is also a task which is available on the freecodecamp.com, I've almost done this but, I'm getting a little bit unexpected results due to decimal... 
+This is also a task which is available on the freecodecamp.com, I've completed it using pure JavaScript!
