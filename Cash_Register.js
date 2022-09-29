@@ -1,14 +1,16 @@
-// 98% task is completed but, I'm getting a little bit unexpected results in a few scenarios because of decimals. 
 const process = (i, remainingChange, cid, currencies) => {
     let currentCurrency = currencies[i];
     if (currentCurrency > remainingChange) {
         return [];
     } else {
         do {
-            currentCurrency += currencies[i];
+            currentCurrency = Math.round((currentCurrency + currencies[i]) * 1e10)/1e10;
         } while (currentCurrency <= remainingChange && currentCurrency <= cid[i][1])
-        currentCurrency -= currencies[i];
-        remainingChange -= currentCurrency;
+        // Dealing with the decimal values, it's important to use the below two line syntax concept NOT the commented ones.
+        currentCurrency = Math.round((currentCurrency - currencies[i]) * 1e10)/1e10;
+        remainingChange = Math.round((remainingChange - currentCurrency) * 1e10)/ 1e10;
+        // currentCurrency -= currencies[i];
+        // remainingChange -= currentCurrency;
         if (i === 0 && remainingChange > 0) {
             return [];
         }
@@ -34,14 +36,22 @@ function checkCashRegister(price, cash, cid) {
         }
     }
     // return change;
+    let totalOfReturn = changeArr.reduce((sum, current) => sum + current[1], 0);
+
     if (changeArr.length == 0) {
         oBject.status = "INSUFFICIENT_FUNDS";
         return oBject;
-    } else {
+    } else if (total === totalOfReturn)
+    {
+        oBject.status = "CLOSED";
+        oBject.change = cid;
+        return oBject;
+    }else {
         oBject.status = "OPEN";
         oBject.change = changeArr;
         return oBject;
     }
 }
 
-console.log(checkCashRegister(19.45, 20, [["PENNY", 0.5], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]));
+
+console.log(checkCashRegister(19.5, 20, [["PENNY", 0.5], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]));
